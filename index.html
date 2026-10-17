@@ -138,6 +138,31 @@
       </div>
 
       <div class="workforce-note reveal" id="workforceNote"></div>
+
+      <div class="layout-example reveal">
+        <div class="layout-example__head">
+          <span class="eyebrow">A 2 Bedroom Layout</span>
+          <h3>Inside one of the <em>2BR homes.</em></h3>
+          <p class="lede">The floor plan below is the 2-bedroom layout shown in the Gallery — the kitchen, living room, and double-vanity bath finishes there are all from this plan.</p>
+        </div>
+        <div class="layout-example__body">
+          <img class="layout-example__plan" src="images/layout-2br.webp" alt="2 Bedroom floor plan — living room, kitchen, dining area, two bedrooms, and two baths" loading="lazy">
+          <div class="layout-example__thumbs">
+            <button data-full="images/interior-kitchen-2br.webp" data-caption="Kitchen — 2BR Layout">
+              <img src="images/interior-kitchen-2br.webp" loading="lazy" alt="Kitchen in the Toombs Court 2BR layout">
+              <span>Kitchen</span>
+            </button>
+            <button data-full="images/interior-living-2br.webp" data-caption="Coastal Living Room Retreat — 2BR Layout">
+              <img src="images/interior-living-2br.webp" loading="lazy" alt="Living room in the Toombs Court 2BR layout">
+              <span>Living Room</span>
+            </button>
+            <button data-full="images/interior-bath-2br.webp" data-caption="Bright Coastal Double-Vanity Bathroom — 2BR Layout">
+              <img src="images/interior-bath-2br.webp" loading="lazy" alt="Double-vanity bathroom in the Toombs Court 2BR layout">
+              <span>Bath</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -176,11 +201,23 @@
         <button data-full="images/gallery-bike-path.webp" data-caption="The island bike path, near Toombs Court">
           <img src="images/gallery-bike-path.webp" loading="lazy" alt="Paved bike path through greenery near Toombs Court, Nantucket">
         </button>
-        <button data-full="images/gallery-dunes.webp" data-caption="A snowy owl in the island dunes">
-          <img src="images/gallery-dunes.webp" loading="lazy" alt="A snowy owl in flight over Nantucket dune grass">
+        <button data-full="images/gallery-nobadeer.webp" data-caption="Nobadeer Beach, Nantucket">
+          <img src="images/gallery-nobadeer.webp" loading="lazy" alt="Nobadeer Beach, Nantucket, with dune grass and the Atlantic beyond">
+        </button>
+        <button data-full="images/gallery-surfside.webp" data-caption="Surfside Beach, Nantucket">
+          <img src="images/gallery-surfside.webp" loading="lazy" alt="Sandy path through the dunes leading to Surfside Beach, Nantucket">
         </button>
         <button class="span-2" data-full="images/neighborhood-meat-fish.webp" data-caption="Nantucket Meat &amp; Fish Market, nearby">
           <img src="images/neighborhood-meat-fish.webp" loading="lazy" alt="Storefront of Nantucket Meat & Fish Market, a short walk from Toombs Court">
+        </button>
+        <button class="span-2" data-full="images/interior-kitchen-2br.webp" data-caption="Kitchen — 2BR Layout">
+          <img src="images/interior-kitchen-2br.webp" loading="lazy" alt="Bright white kitchen with island and pendant lighting in the Toombs Court 2BR layout">
+        </button>
+        <button data-full="images/interior-living-2br.webp" data-caption="Coastal Living Room Retreat — 2BR Layout">
+          <img src="images/interior-living-2br.webp" loading="lazy" alt="Coastal-style living room with blue accent pillows in the Toombs Court 2BR layout">
+        </button>
+        <button data-full="images/interior-bath-2br.webp" data-caption="Bright Coastal Double-Vanity Bathroom — 2BR Layout">
+          <img src="images/interior-bath-2br.webp" loading="lazy" alt="Bright bathroom with double vanity and tiled shower in the Toombs Court 2BR layout">
         </button>
       </div>
     </div>
@@ -274,7 +311,12 @@
         </dl>
       </div>
       <div class="reveal">
-        <form class="form-grid" id="inquiryForm" action="https://formspree.io/f/[TBD]" method="POST">
+        <form class="form-grid" id="inquiryForm" action="https://formsubmit.co/ryan@mcneil-development.com" method="POST">
+          <input type="hidden" name="_cc" value="sxc@mcneil-development.com">
+          <input type="hidden" name="_subject" value="Toombs Court leasing inquiry">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
           <div class="form-row-2">
             <div class="field">
               <label for="name">Full name</label>
@@ -310,8 +352,9 @@
             <textarea id="message" name="message" rows="4" placeholder="Tell us about your bedroom needs, headcount, or timing."></textarea>
           </div>
           <button type="submit" class="btn btn-primary">Send Inquiry</button>
-          <p class="form-note">Form delivery endpoint is <code>[TBD]</code> — see README for setup. Availability is confirmed directly by McNeil Development by phone.</p>
+          <p class="form-note">Inquiries are emailed to McNeil Development. Availability is confirmed directly by phone — call (617) 780-1627 for the fastest answer.</p>
           <div class="form-success" id="formSuccess">Thanks — we'll follow up shortly. For the fastest answer, call (617) 780-1627.</div>
+          <div class="form-success form-success--error" id="formError">We couldn't reach the inquiry form — your email app should have opened a pre-filled message instead. You can also call (617) 780-1627.</div>
         </form>
       </div>
     </div>

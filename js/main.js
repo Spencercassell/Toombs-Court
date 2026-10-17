@@ -110,7 +110,7 @@
   const lightboxCaption = document.getElementById('lightboxCaption');
   const lightboxClose = document.getElementById('lightboxClose');
 
-  document.querySelectorAll('#galleryGrid button[data-full]').forEach((btn) => {
+  document.querySelectorAll('[data-full]').forEach((btn) => {
     btn.addEventListener('click', () => {
       lightboxImg.src = btn.dataset.full;
       lightboxImg.alt = btn.querySelector('img')?.alt || '';
@@ -141,22 +141,42 @@
 
   const form = document.getElementById('inquiryForm');
   const formSuccess = document.getElementById('formSuccess');
+  const formError = document.getElementById('formError');
+
+  // Delivers to both ryan@mcneil-development.com (form action) and
+  // sxc@mcneil-development.com (via the hidden _cc field below) through
+  // FormSubmit.co — a signup-free static-form backend. The FIRST submission
+  // triggers a one-time activation email to ryan@mcneil-development.com that
+  // must be clicked before delivery starts flowing. See README.
+  const AJAX_ENDPOINT = 'https://formsubmit.co/ajax/ryan@mcneil-development.com';
+
   if (form) {
     form.addEventListener('submit', async (e) => {
-      const endpoint = form.getAttribute('action') || '';
-      if (endpoint.includes('[TBD]')) {
-        // Formspree endpoint not configured yet — fall back to a mailto draft so the
-        // inquiry isn't lost. See README "Set up the inquiry form".
-        e.preventDefault();
-        const data = new FormData(form);
+      e.preventDefault();
+      formError?.classList.remove('is-visible');
+      formSuccess?.classList.remove('is-visible');
+
+      const data = new FormData(form);
+      try {
+        const res = await fetch(AJAX_ENDPOINT, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: data,
+        });
+        if (!res.ok) throw new Error(`FormSubmit responded ${res.status}`);
+        form.reset();
+        formSuccess?.classList.add('is-visible');
+      } catch (err) {
+        // Network/endpoint failure — fall back to a pre-filled mailto to both
+        // addresses so the inquiry isn't lost.
         const subject = encodeURIComponent('Toombs Court leasing inquiry');
         const body = encodeURIComponent(
           Array.from(data.entries())
             .map(([k, v]) => `${k}: ${v}`)
             .join('\n')
         );
-        window.location.href = `mailto:ryan@mcneil-development.com?subject=${subject}&body=${body}`;
-        formSuccess?.classList.add('is-visible');
+        window.location.href = `mailto:ryan@mcneil-development.com,sxc@mcneil-development.com?subject=${subject}&body=${body}`;
+        formError?.classList.add('is-visible');
       }
     });
   }

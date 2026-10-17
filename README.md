@@ -29,16 +29,28 @@ Edit `data/units.json`. The homepage fetches this file at runtime and renders th
 
 When a **new release** (e.g. Lot A, May 1, 2027) is ready to publish, duplicate the `property`/`unitTypes` shape for it and extend `js/main.js`'s `renderUnits()`/hotspot logic to switch between releases — the current version assumes a single active release, matching what's in scope today.
 
+## Inquiry form delivery
+
+The leasing form (`#inquiryForm` in `index.html`) posts to [FormSubmit.co](https://formsubmit.co) — a signup-free static-form backend, chosen because no Formspree/SMTP account or API key was available to configure:
+
+- Action: `https://formsubmit.co/ryan@mcneil-development.com` (native fallback if JS is off)
+- `js/main.js` submits via `https://formsubmit.co/ajax/ryan@mcneil-development.com` (fetch/AJAX) so the page shows an inline success message instead of navigating away
+- Hidden `_cc` field also sends every inquiry to `sxc@mcneil-development.com`
+- Hidden `_subject` / `_template=table` give the email a clear subject line and a readable table layout
+- `_captcha=false` keeps submission frictionless; re-enable (remove that field) if spam becomes a problem
+- A hidden `_honey` field is a basic spam honeypot
+
+**One-time setup required:** FormSubmit activates a destination address on its *first* submission — that submission triggers a confirmation email to `ryan@mcneil-development.com` with an activation link. Until that link is clicked, inquiries won't be delivered. Submit the form once after launch and have Ryan click the confirmation email. If the fetch ever fails (network issue, address not yet activated), `main.js` falls back to opening a `mailto:` pre-filled to both `ryan@mcneil-development.com` and `sxc@mcneil-development.com` so the inquiry isn't lost.
+
 ## Open `[TBD]` items
 
 Marked in-repo so they're easy to grep (`grep -rn "\[TBD\]"`):
 
-1. **Inquiry form endpoint** (`index.html` `<form action="https://formspree.io/f/[TBD]">`) — create a Formspree form (or a Vercel serverless function) and drop the real endpoint in. Until then, `js/main.js` falls back to opening a pre-filled `mailto:` to `ryan@mcneil-development.com` so inquiries aren't lost.
-2. **Leasing inbox** — the brief's catalogue footer lists `ryan@mcneil-development.com`; the docx's "Open Questions" section separately lists `sxc@mcneil-development.com`. The site currently uses `ryan@mcneil-development.com` everywhere. Confirm which is canonical and update `index.html` (3 places) + `js/main.js` (mailto fallback) if it should be the other address.
-3. **Unit square footage, floor plans, and per-unit counts** (`data/units.json` → `sqft`, `count`, `features`, `floorPlanImage`) — the catalogue only publishes starting rent by unit type, not individual unit specs. Fill in once available.
-4. **`numberOfAccommodationUnits`** in the JSON-LD block (`index.html` `<head>`).
-5. **Logo / wordmark** — no standalone Toombs Court logo file was supplied; the hero/nav use a text wordmark ("Toombs *Court*") in Fraunces. Swap in a mark if/when one exists.
-6. **Custom domain** — none requested; site ships on the default Vercel subdomain.
+1. **Unit square footage, floor plans, and per-unit counts** (`data/units.json` → `sqft`, `count`, `features`, `floorPlanImage`) — the catalogue only publishes starting rent by unit type, not individual unit specs. Fill in once available. (The 2BR floor plan shown under Availability and in the Gallery is illustrative, not tied to a specific numbered unit.)
+2. **`numberOfAccommodationUnits`** in the JSON-LD block (`index.html` `<head>`).
+3. **Logo / wordmark** — no standalone Toombs Court logo file was supplied; the hero/nav use a text wordmark ("Toombs *Court*") in Fraunces. Swap in a mark if/when one exists.
+4. **Custom domain** — none requested; site ships on the default Vercel subdomain.
+5. **Form captcha** — currently disabled (`_captcha=false`) for a frictionless submit. Revisit if the inbox starts getting spam.
 
 ## Branding
 
@@ -48,7 +60,13 @@ Marked in-repo so they're easy to grep (`grep -rn "\[TBD\]"`):
 
 ## Images
 
-All images in `images/` are pre-optimized WebP, converted from the source files in `Toombs-court/` on the Desktop (`cwebp`, quality 78–90, resized for web). The architectural site plan was rendered from the source PDF at 250dpi and compressed the same way. No raw/full-resolution originals are committed (see `.gitignore`).
+All images in `images/` are pre-optimized WebP, converted from source photography (`cwebp`, quality 78–90, resized for web):
+
+- Exterior, map, and amenity photos from `Toombs-court/` on the Desktop (the public marketing source folder named in `BRIEF.md`).
+- The architectural site plan, rendered from the source PDF at 250dpi and compressed the same way.
+- Nobadeer Beach and Surfside Beach gallery photos, and the three 2BR interior photos (kitchen, living room, double-vanity bath) plus the 2BR floor plan shown under Availability — these came from a separate "Source interior" folder, not the financial/deal-file material elsewhere on the McNeil Development drive, which was deliberately left out of this site.
+
+No raw/full-resolution originals are committed (see `.gitignore`).
 
 ## Local preview
 
@@ -62,4 +80,4 @@ python3 -m http.server 8000
 
 ## Deploy
 
-Pushing to `main` on `Spencercassell/Toombs-Court` triggers a Vercel deployment once the repo is linked to a Vercel project (Vercel dashboard → Add New → Project → import this repo; framework preset "Other", no build command, output directory `.`).
+Live at **https://toombs-court.vercel.app**. The Vercel project (`cre18/toombs-court`) is already linked to `Spencercassell/Toombs-Court` — every push to `main` redeploys automatically.
