@@ -1,0 +1,5 @@
+.DS_Store
+*.log
+.vercel
+raw/
+node_modules/
